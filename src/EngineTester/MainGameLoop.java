@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import models.RawModel;
+import renderEngine.OBJLoader;
 import renderEngine.Renderer;
 import shaders.StaticShader;
 import textures.ModelTexture;
@@ -25,7 +26,7 @@ public class MainGameLoop {
         StaticShader shader = new StaticShader();
         Renderer renderer = new Renderer(shader);
 
-        float[] vertices = {
+        /*float[] vertices = {
                 -0.5f,0.5f,-0.5f,
                 -0.5f,-0.5f,-0.5f,
                 0.5f,-0.5f,-0.5f,
@@ -102,20 +103,23 @@ public class MainGameLoop {
                 20,21,23,
                 23,21,22
 
-        };
+        };*/
 
-        RawModel model = loader.loadToVAO(vertices,textureCoords, indices);
-        ModelTexture texture = new ModelTexture(loader.loadTexture("test"));
+
+        RawModel model = OBJLoader.loadObjModel("rifle",loader);
+
+        //RawModel model = loader.loadToVAO(vertices,textureCoords, indices);
+        ModelTexture texture = new ModelTexture(loader.loadTexture("Plane002DiffuseMap"));
         TexturedModel texturedModel = new TexturedModel(model,texture);
 
-        Entity entity = new Entity(texturedModel, new Vector3f(0,0,-1),0,0,0,1);
+        Entity entity = new Entity(texturedModel, new Vector3f(0,0,-3),0,0,0,0.02f);
 
         Camera camera = new Camera();
 
         while(!Display.isCloseRequested())
         {
-            entity.increasePosition(0,0,-.01f);
-            entity.increaseRotation(0,1,.5f);
+            entity.increasePosition(0,0,0);
+            entity.increaseRotation(0,.02f,1f);
             camera.move();
             renderer.prepare();
             shader.start();
